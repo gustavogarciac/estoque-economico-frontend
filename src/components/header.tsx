@@ -7,7 +7,7 @@ import { UserMenu } from './user-menu'
 
 export const Header = () => {
   return (
-    <header className="bg-secondary/40 flex flex-col space-y-6 px-5 pt-5">
+    <header className="bg-secondary/40 flex flex-col space-y-2 px-5 pt-5">
       <div className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-4">
           <Container className="size-8" />
@@ -16,6 +16,10 @@ export const Header = () => {
 
           <HeaderPopover />
         </div>
+
+        <span className="text-muted text-xs">
+          Developed with love by Gustavo Garcia.
+        </span>
 
         <div className="flex items-center gap-4">
           <Button

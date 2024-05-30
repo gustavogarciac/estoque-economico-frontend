@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
@@ -27,8 +28,9 @@ export const NavigationMenuItem = ({ item }: NavigationMenuItemProps) => {
         isActive &&
           'border-primary rounded-b-none border-b-2 hover:bg-transparent',
       )}
+      asChild
     >
-      {item.label}
+      <Link href={item.path}>{item.label}</Link>
     </Button>
   )
 }
