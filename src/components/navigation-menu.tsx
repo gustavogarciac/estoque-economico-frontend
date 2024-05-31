@@ -1,10 +1,11 @@
 import React from 'react'
 
+import { Container } from './container'
 import { NavigationMenuItem } from './navigation-menu-item'
 
 const navigationItems = [
   {
-    label: 'Início',
+    label: 'Registros',
     path: '/',
   },
   {
@@ -23,12 +24,14 @@ const navigationItems = [
 
 export const NavigationMenu = () => {
   return (
-    <nav className="flex">
-      <ul className="flex flex-row gap-2">
-        {navigationItems.map((item) => (
-          <NavigationMenuItem key={item.label} item={item} />
-        ))}
-      </ul>
-    </nav>
+    <Container>
+      <nav className="flex rounded-sm bg-secondary/40">
+        <ul className="flex flex-row gap-2">
+          {navigationItems.map((item) => (
+            <NavigationMenuItem key={item.label} item={item} />
+          ))}
+        </ul>
+      </nav>
+    </Container>
   )
 }
