@@ -9,13 +9,15 @@ import {
 } from '@/components/ui/table'
 import { fakeProductData } from '@/constants/fake-product-data'
 
+import { NewProductDialog } from './_components/new-product-dialog'
 import { ProductsTableRow } from './_components/products-table-row'
 
 export default function Home() {
   return (
     <Container otherClasses="mt-5">
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-2">
         <SearchInput />
+        <NewProductDialog />
       </div>
 
       <Table className="mt-6">
