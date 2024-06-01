@@ -17,7 +17,7 @@ export const Header = () => {
           <HeaderPopover />
         </div>
 
-        <span className="text-xs text-muted">
+        <span className="hidden text-xs text-muted md:block">
           Developed with love by Gustavo Garcia.
         </span>
 

@@ -32,7 +32,7 @@ export const SearchInput = () => {
 
   return (
     <form className="flex w-full flex-row gap-2">
-      <div className="bg-secondary/40 relative flex w-full overflow-hidden rounded-sm">
+      <div className="relative flex w-full overflow-hidden rounded-sm bg-secondary/40">
         <Button size="icon" variant="ghost" onClick={handleSubmitSearch}>
           <SearchIcon className="size-4" />
         </Button>
@@ -55,7 +55,7 @@ export const SearchInput = () => {
         onValueChange={(value: 'code' | 'name') => setFilterType(value)}
       >
         <SelectTrigger className="w-32">
-          <span className="text-muted-foreground text-sm">Filtrar por:</span>
+          <span className="text-sm text-muted-foreground">Filtrar por:</span>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="code">Código</SelectItem>

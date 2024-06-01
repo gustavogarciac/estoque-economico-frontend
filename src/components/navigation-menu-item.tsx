@@ -24,9 +24,9 @@ export const NavigationMenuItem = ({ item }: NavigationMenuItemProps) => {
       size={'sm'}
       variant={'ghost'}
       className={cn(
-        'duration-400 transition-all ease-linear',
+        'duration-400 bg-secondary/40 transition-all ease-linear md:bg-transparent',
         isActive &&
-          'border-primary rounded-b-none border-b-2 hover:bg-transparent',
+          'rounded-b-none border-b-2 border-primary hover:bg-transparent',
       )}
       asChild
     >

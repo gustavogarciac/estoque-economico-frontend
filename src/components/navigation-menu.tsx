@@ -25,8 +25,8 @@ const navigationItems = [
 export const NavigationMenu = () => {
   return (
     <Container>
-      <nav className="flex rounded-sm bg-secondary/40">
-        <ul className="flex flex-row gap-2">
+      <nav className="rounded-sm md:bg-secondary/40">
+        <ul className="grid grid-cols-2 flex-row gap-4 md:flex">
           {navigationItems.map((item) => (
             <NavigationMenuItem key={item.label} item={item} />
           ))}
