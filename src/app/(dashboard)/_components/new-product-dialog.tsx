@@ -73,7 +73,7 @@ export const NewProductDialog = () => {
             <Separator />
           </div>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <p className="text-sm text-muted-foreground">
             Adicione todos os detalhes para criar um novo registro de produto.
           </p>
