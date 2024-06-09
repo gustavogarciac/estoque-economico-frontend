@@ -19,8 +19,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { CategoryDetailsDialog } from './category-details-dialog'
-
 interface CategoryDropdownMenuProps {
   category: Category
 }
@@ -40,7 +38,7 @@ export const CategoryDropdownMenu = ({
         <DropdownMenuLabel>Opções</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <CategoryDetailsDialog category={category} />
+          <span>Category details</span>
           <DropdownMenuItem>
             <PencilIcon className="mr-2 size-4" />
             <span>Editar</span>
