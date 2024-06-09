@@ -1,12 +1,12 @@
+'use client'
+
 import {
   BarChartBigIcon,
   BarcodeIcon,
   CircleEllipsis,
-  ExternalLinkIcon,
   PencilIcon,
   TrashIcon,
 } from 'lucide-react'
-import React from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -18,6 +18,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
+import { CategoryDetailsDialog } from './category-details-dialog'
 
 interface CategoryDropdownMenuProps {
   category: Category
@@ -38,10 +40,7 @@ export const CategoryDropdownMenu = ({
         <DropdownMenuLabel>Opções</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <ExternalLinkIcon className="mr-2 size-4" />
-            <span>Detalhes</span>
-          </DropdownMenuItem>
+          <CategoryDetailsDialog category={category} />
           <DropdownMenuItem>
             <PencilIcon className="mr-2 size-4" />
             <span>Editar</span>
