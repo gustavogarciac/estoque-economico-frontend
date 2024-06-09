@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 import { LoaderCircle } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -104,7 +105,11 @@ export const SignUpForm = () => {
             <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o seu nome!" {...field} />
+                <Input
+                  placeholder="Insira o seu nome!"
+                  {...field}
+                  autoComplete="off"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -117,7 +122,11 @@ export const SignUpForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o seu e-mail de acesso" {...field} />
+                <Input
+                  placeholder="Insira o seu e-mail de acesso"
+                  {...field}
+                  autoComplete="off"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -157,6 +166,13 @@ export const SignUpForm = () => {
             </FormItem>
           )}
         />
+
+        <span className="flex flex-row items-center gap-1 text-sm">
+          Já possui uma conta?{' '}
+          <Link href="/auth/sign-in" className="hover:underline">
+            Entrar
+          </Link>
+        </span>
 
         <Button
           type="submit"

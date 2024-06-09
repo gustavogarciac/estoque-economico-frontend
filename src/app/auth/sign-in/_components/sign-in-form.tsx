@@ -107,7 +107,11 @@ export const SignInForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o seu e-mail de acesso" {...field} />
+                <Input
+                  placeholder="Insira o seu e-mail de acesso"
+                  {...field}
+                  autoComplete="off"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
