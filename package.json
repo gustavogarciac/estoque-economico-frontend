@@ -24,6 +24,7 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
     "cookies-next": "^4.2.1",
     "date-fns": "^3.6.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
