@@ -1,11 +1,15 @@
 import { BellIcon, Container } from 'lucide-react'
 
+import { getUserInfo } from '@/actions/get-user-info'
+
 import { HeaderPopover } from './header-popover'
 import { NavigationMenu } from './navigation-menu'
 import { Button } from './ui/button'
 import { UserMenu } from './user-menu'
 
-export const Header = () => {
+export const Header = async () => {
+  const user = await getUserInfo()
+
   return (
     <header className="flex flex-col space-y-4">
       <div className="flex flex-row items-center justify-between bg-secondary/40 p-5">
@@ -31,7 +35,7 @@ export const Header = () => {
             <BellIcon className="size-5" />
           </Button>
 
-          <UserMenu />
+          {user ? <UserMenu user={user} /> : null}
         </div>
       </div>
 
