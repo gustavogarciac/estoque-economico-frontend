@@ -3,7 +3,6 @@ import { BellIcon, Container } from 'lucide-react'
 import { getUserInfo } from '@/actions/get-user-info'
 
 import { HeaderPopover } from './header-popover'
-import { NavigationMenu } from './navigation-menu'
 import { Button } from './ui/button'
 import { UserMenu } from './user-menu'
 
@@ -38,8 +37,6 @@ export const Header = async () => {
           {user ? <UserMenu user={user} /> : null}
         </div>
       </div>
-
-      <NavigationMenu />
     </header>
   )
 }
