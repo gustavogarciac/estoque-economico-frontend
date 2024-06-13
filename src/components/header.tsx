@@ -10,7 +10,7 @@ export const Header = async () => {
   const user = await getUserInfo()
 
   return (
-    <header className="flex flex-col space-y-4">
+    <header className="flex flex-col space-y-4 border-b">
       <div className="flex flex-row items-center justify-between bg-secondary/40 p-5">
         <div className="flex items-center gap-4">
           <Container className="size-8" />
