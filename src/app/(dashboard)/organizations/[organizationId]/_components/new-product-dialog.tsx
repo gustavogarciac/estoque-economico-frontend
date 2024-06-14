@@ -25,7 +25,11 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { toast } from '@/components/ui/use-toast'
 
-export const NewProductDialog = () => {
+interface NewProductDialogProps {
+  organizationId: string
+}
+
+export const NewProductDialog = ({ organizationId }: NewProductDialogProps) => {
   const [code, setCode] = useState('')
   const [quantity, setQuantity] = useState('')
   const [category, setCategory] = useState('')
@@ -41,7 +45,8 @@ export const NewProductDialog = () => {
         throw new Error('Todos os campos são obrigatórios.')
       }
 
-      console.log('Submitting')
+      console.log('Posting on organizationId: ', organizationId)
+
       toast({
         title: 'Registro criado!',
         description: 'O registro foi criado com sucesso.',

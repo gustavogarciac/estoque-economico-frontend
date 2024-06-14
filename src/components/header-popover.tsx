@@ -1,28 +1,22 @@
-import { faker } from '@faker-js/faker'
-import { ChevronsUpDownIcon, PlusCircleIcon } from 'lucide-react'
+import { PlusCircleIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { GetUserOrganizationResponse } from '@/actions/get-user-organizations'
+
+import { HeaderPopoverTrigger } from './header-popover-trigger'
+import { OrganizationPopoverItem } from './organization-popover-item'
 import { Button } from './ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Popover, PopoverContent } from './ui/popover'
 
-export const HeaderPopover = () => {
-  const image = faker.image.avatarGitHub()
-  const enterprise = faker.company.name()
+interface HeaderPopoverProps {
+  organizations: GetUserOrganizationResponse[]
+}
 
+export const HeaderPopover = ({ organizations }: HeaderPopoverProps) => {
   return (
     <Popover>
-      <PopoverTrigger className="flex flex-row items-center gap-2 rounded-sm p-2 transition-colors duration-300 ease-in-out hover:bg-zinc-50/10">
-        <Avatar className="max-h-[20px] max-w-[20px]">
-          <AvatarImage src={image} />
-          <AvatarFallback>GG</AvatarFallback>
-        </Avatar>
-
-        <span className="text-sm font-semibold">{enterprise}</span>
-
-        <ChevronsUpDownIcon className="size-4" />
-      </PopoverTrigger>
+      <HeaderPopoverTrigger organizations={organizations} />
 
       <PopoverContent align="start" className="p-0">
         <p className="border-b p-3 text-xs uppercase text-muted-foreground">
@@ -30,20 +24,11 @@ export const HeaderPopover = () => {
         </p>
 
         <div className="flex flex-col">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div
-              key={index}
-              className="flex flex-row items-center gap-2 border border-border p-3 hover:bg-muted/40"
-            >
-              <Avatar className="max-h-[15px] max-w-[15px]">
-                <AvatarImage src={image} />
-                <AvatarFallback>GG</AvatarFallback>
-              </Avatar>
-
-              <span className="text-xs font-semibold">
-                {faker.company.name()}
-              </span>
-            </div>
+          {organizations.map((organization) => (
+            <OrganizationPopoverItem
+              key={organization.id}
+              organization={organization}
+            />
           ))}
 
           <Button

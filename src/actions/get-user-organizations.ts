@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 
 import { api } from '@/lib/axios'
 
-interface Organization {
+export interface GetUserOrganizationResponse {
   id: string
   name: string
   domain: string | null
@@ -17,11 +17,14 @@ export async function getUserOrganizations() {
 
   if (!token?.value) return null
 
-  const response = await api.get<Organization[]>('/users/organizations', {
-    headers: {
-      Authorization: `Bearer ${token.value}`,
+  const response = await api.get<GetUserOrganizationResponse[]>(
+    '/users/organizations',
+    {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
     },
-  })
+  )
 
   return response.data
 }
