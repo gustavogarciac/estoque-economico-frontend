@@ -45,8 +45,6 @@ export const NewProductDialog = ({ organizationId }: NewProductDialogProps) => {
         throw new Error('Todos os campos são obrigatórios.')
       }
 
-      console.log('Posting on organizationId: ', organizationId)
-
       toast({
         title: 'Registro criado!',
         description: 'O registro foi criado com sucesso.',

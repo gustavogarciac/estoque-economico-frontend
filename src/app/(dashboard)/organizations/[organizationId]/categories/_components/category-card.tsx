@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 
@@ -11,7 +13,19 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
     <Card className="p-0">
       <CardHeader className="flex flex-row items-center justify-between p-4">
-        <span>{category.name}</span>
+        <div className="flex flex-row items-center gap-2">
+          {category.imageUrl ? (
+            <Image
+              width={20}
+              height={20}
+              alt={`${category.name} icon`}
+              src={category.imageUrl}
+              className="rounded-full"
+            />
+          ) : null}
+
+          <span>{category.name}</span>
+        </div>
 
         <CategoryDropdownMenu category={category} />
       </CardHeader>

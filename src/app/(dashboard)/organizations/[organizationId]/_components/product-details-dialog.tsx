@@ -45,7 +45,6 @@ export const ProductDetailsDialog = ({
     try {
       setIsSubmitting(true)
       await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log('Product updated:', { code, quantity, category })
       toast({
         title: 'Registro atualizado!',
         description: 'O registro foi atualizado com sucesso.',

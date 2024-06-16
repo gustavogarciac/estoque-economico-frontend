@@ -17,7 +17,10 @@ const CategoriesPageLoading = () => {
         {Array.from({ length: 5 }, () => (
           <Card key={faker.string.uuid()}>
             <CardHeader className="flex flex-row items-center justify-between px-4 py-6">
-              <Skeleton className="h-4 w-1/4" />
+              <div className="flex w-full flex-row items-center gap-2">
+                <Skeleton className="h-5 w-5 rounded-full" />
+                <Skeleton className="h-4 w-20" />
+              </div>
 
               <Skeleton className="h-4 w-4 rounded-full" />
             </CardHeader>

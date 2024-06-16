@@ -1,8 +1,11 @@
 'use client'
 
+import { faker } from '@faker-js/faker'
+import { AxiosError } from 'axios'
 import { Loader2, PlusIcon } from 'lucide-react'
 import Image from 'next/image'
-import React, { ChangeEvent, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -18,31 +21,25 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
+import { api } from '@/lib/axios'
+import { cn } from '@/lib/utils'
 
-export const NewCategoryDialog = () => {
+interface NewCategoryDialogProps {
+  organizationId: string
+  triggerClasses?: string
+  cardTrigger?: boolean
+}
+
+export const NewCategoryDialog = ({
+  triggerClasses,
+  cardTrigger = false,
+  organizationId,
+}: NewCategoryDialogProps) => {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageUrl, setImageUrl] = useState(faker.image.avatarGitHub())
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const imageUrlPreview = useMemo(() => {
-    if (!imageFile) {
-      return null
-    }
-
-    return URL.createObjectURL(imageFile)
-  }, [imageFile])
-
-  async function handleFileSelected(event: ChangeEvent<HTMLInputElement>) {
-    const { files } = event.target
-
-    if (!files) {
-      return
-    }
-
-    const selectedFile = files[0]
-    setImageFile(selectedFile)
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -54,12 +51,30 @@ export const NewCategoryDialog = () => {
         throw new Error('O campo nome é obrigatório.')
       }
 
+      await api.post(`/categories/${organizationId}`, {
+        name,
+        description,
+        imageUrl,
+      })
+
+      router.refresh()
+
       toast({
         title: 'Categoria criada!',
         description: `A categoria ${name} foi criada com sucesso!`,
         variant: 'success',
       })
     } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 400) {
+          return toast({
+            title: error.response.data.message,
+            description: 'O campo nome é obrigatório.',
+            variant: 'destructive',
+          })
+        }
+      }
+
       toast({
         title: 'Erro ao criar categoria',
         description: 'Ocorreu um erro ao tentar criar uma nova categoria.',
@@ -73,7 +88,10 @@ export const NewCategoryDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button
+          className={cn(triggerClasses)}
+          variant={cardTrigger ? 'ghost' : 'default'}
+        >
           <PlusIcon className="mr-2 size-4" /> Nova categoria
         </Button>
       </DialogTrigger>
@@ -96,10 +114,11 @@ export const NewCategoryDialog = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Nome de identificação da categoria"
+              required
             />
           </div>
 
-          <div className="space-y-1">
+          <div className="flex flex-col gap-1">
             <Label htmlFor="input-code-new-product">Descrição</Label>
             <Textarea
               placeholder="Adicione uma descrição detalhada sobre a categoria..."
@@ -108,27 +127,34 @@ export const NewCategoryDialog = () => {
               id="textarea-description-new-category"
               className="resize-none"
             />
+            <Button
+              size="sm"
+              className="self-end"
+              type="button"
+              variant="ghost"
+              onClick={() => setDescription(faker.commerce.productDescription)}
+            >
+              Gerar descrição aleatória
+            </Button>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <div className="space-y-1">
-              <Label htmlFor="input-image-url-new-category">Imagem</Label>
-              <Input
-                type="file"
-                id="input-image-url-new-category"
-                accept="images/*"
-                onChange={handleFileSelected}
-              />
-            </div>
-            {imageUrlPreview && (
-              <Image
-                src={imageUrlPreview}
-                width={100}
-                height={100}
-                alt=""
-                className="aspect-square rounded-full object-cover"
-              />
-            )}
+          <div className="flex flex-row items-center gap-2">
+            <Image
+              src={imageUrl}
+              width={100}
+              height={100}
+              alt=""
+              className="rounded-full"
+            />
+            <Button
+              type="button"
+              id="input-image-url-new-category"
+              variant="ghost"
+              size="sm"
+              onClick={() => setImageUrl(faker.image.avatarGitHub())}
+            >
+              Gerar nova imagem
+            </Button>
           </div>
 
           <div className="mt-4 flex justify-end gap-2">
