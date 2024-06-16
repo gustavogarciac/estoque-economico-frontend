@@ -17,7 +17,7 @@ interface Organization {
 
 interface Product {
   id: string
-  name: string
+  name: string | null
   code: string
   stock: number
   description: string | null

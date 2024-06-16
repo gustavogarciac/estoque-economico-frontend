@@ -1,5 +1,7 @@
+import { redirect } from 'next/navigation'
 import React from 'react'
 
+import { getUserInfo } from '@/actions/get-user-info'
 import { Container } from '@/components/container'
 import { SearchInput } from '@/components/search-input'
 import {
@@ -32,12 +34,18 @@ const OrganizationIdPage = async ({
   params: { organizationId: string }
 }) => {
   const { products } = await fetchProducts(params.organizationId)
+  const user = await getUserInfo()
+
+  if (!user) redirect('/auth/sign-in')
 
   return (
     <Container otherClasses="mt-5">
       <div className="flex flex-row gap-2">
         <SearchInput />
-        <NewProductDialog organizationId={params.organizationId} />
+        <NewProductDialog
+          organizationId={params.organizationId}
+          userId={user.id}
+        />
       </div>
 
       <Table className="mt-6">
