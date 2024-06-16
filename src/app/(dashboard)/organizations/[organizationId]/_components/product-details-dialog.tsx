@@ -26,17 +26,16 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { toast } from '@/components/ui/use-toast'
-import { ProductData } from '@/constants/fake-product-data'
 
 interface ProductDetailsDialogProps {
-  product: ProductData
+  product: Product
 }
 
 export const ProductDetailsDialog = ({
   product,
 }: ProductDetailsDialogProps) => {
   const [code, setCode] = useState(product.code)
-  const [quantity, setQuantity] = useState(product.quantity)
+  const [stock, setStock] = useState(product.stock)
   const [category, setCategory] = useState(product.category)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -90,8 +89,9 @@ export const ProductDetailsDialog = ({
             <div className="col-span-2 space-y-1">
               <Label htmlFor="input-code-details">Quantidade</Label>
               <Input
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+                value={stock}
+                type="number"
+                onChange={(e) => setStock(Number(e.target.value))}
                 id="input-quantity-details"
               />
             </div>
@@ -128,7 +128,7 @@ export const ProductDetailsDialog = ({
             <Label htmlFor="input-author-details">Autor:</Label>
             <div className="grid grid-cols-3 gap-2">
               <Input
-                value={product.author}
+                value={product.author.name}
                 disabled
                 id="input-author-details"
                 className="col-span-2"

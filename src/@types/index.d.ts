@@ -14,6 +14,20 @@ interface Organization {
   createdAt: string
   updatedAt: string
 }
+
+interface Product {
+  id: string
+  name: string
+  code: string
+  stock: number
+  description: string | null
+  category: string
+  author: {
+    id: string
+    name: string
+  }
+  registeredAt: Date
+}
 interface User {
   id: string
   name: string

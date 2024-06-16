@@ -9,16 +9,30 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { fakeProductData } from '@/constants/fake-product-data'
+import { api } from '@/lib/axios'
 
 import { NewProductDialog } from './_components/new-product-dialog'
 import { ProductsTableRow } from './_components/products-table-row'
 
-const OrganizationIdPage = ({
+interface FetchProductResponse {
+  products: Product[]
+}
+
+async function fetchProducts(organizationId: string) {
+  const products = await api.get<FetchProductResponse>(
+    `/organizations/${organizationId}/products`,
+  )
+
+  return products.data
+}
+
+const OrganizationIdPage = async ({
   params,
 }: {
   params: { organizationId: string }
 }) => {
+  const { products } = await fetchProducts(params.organizationId)
+
   return (
     <Container otherClasses="mt-5">
       <div className="flex flex-row gap-2">
@@ -38,8 +52,8 @@ const OrganizationIdPage = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {fakeProductData.map((product) => (
-            <ProductsTableRow key={product.code} product={product} />
+          {products.map((product) => (
+            <ProductsTableRow key={product.id} product={product} />
           ))}
         </TableBody>
       </Table>
