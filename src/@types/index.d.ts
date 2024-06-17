@@ -21,7 +21,11 @@ interface Product {
   code: string
   stock: number
   description: string | null
-  category: string
+  category: {
+    id: string
+    name: string
+  }
+  organizationId: string
   author: {
     id: string
     name: string

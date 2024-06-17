@@ -16,7 +16,7 @@ export const ProductsTableRow = ({ product }: ProductsTableRowProps) => {
       <TableCell className="text-start">{product.stock}</TableCell>
       <TableCell>
         <span className="rounded-sm bg-muted px-2 py-1">
-          {product.category}
+          {product.category.name}
         </span>
       </TableCell>
       <TableCell>
