@@ -27,6 +27,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { api } from '@/lib/axios'
 
+import { NewCategoryDialog } from '../categories/_components/new-category-dialog'
+
 interface NewProductFormProps {
   userId: string
   organizationId: string
@@ -73,7 +75,10 @@ export const NewProductForm = ({
         name: name || null,
       })
 
-      form.reset()
+      form.resetField('code')
+      form.resetField('stock')
+      form.resetField('name')
+      form.resetField('description')
       router.refresh()
 
       toast({
@@ -158,11 +163,18 @@ export const NewProductForm = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
+                    {categories.length > 0 ? (
+                      categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <NewCategoryDialog
+                        organizationId={organizationId}
+                        triggerClasses="w-full"
+                      />
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
