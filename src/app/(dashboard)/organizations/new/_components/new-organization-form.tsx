@@ -2,11 +2,10 @@
 
 import { faker } from '@faker-js/faker'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
-import { CircleHelpIcon } from 'lucide-react'
+import { CircleHelpIcon, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -29,28 +28,22 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { toast } from '@/components/ui/use-toast'
-import { api } from '@/lib/axios'
+import { generateSlug } from '@/lib/utils'
+
+import { createOrganizationAction } from '../actions'
 
 const organizationFormSchema = z.object({
-  name: z.string(),
-  domain: z.string().nullable(),
+  name: z.string().min(2),
+  domain: z.string(),
   shouldAttachUsersByDomain: z.boolean().default(false),
-  description: z.string().nullable(),
-  imageUrl: z.string().nullable(),
-  ownerId: z.string(),
+  description: z.string(),
+  imageUrl: z.string(),
 })
 
-type OrganizationFormValues = z.infer<typeof organizationFormSchema>
+export type OrganizationFormValues = z.infer<typeof organizationFormSchema>
 
-interface NewOrganizationFormProps {
-  userId: string
-}
-
-interface SubmitOrganizationCreationResponse {
-  organizationId: string
-}
-
-export const NewOrganizationForm = ({ userId }: NewOrganizationFormProps) => {
+export const NewOrganizationForm = () => {
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const [organizationImage, setOrganizationImage] = useState(
     faker.image.avatarGitHub(),
@@ -64,49 +57,31 @@ export const NewOrganizationForm = ({ userId }: NewOrganizationFormProps) => {
       shouldAttachUsersByDomain: false,
       description: '',
       imageUrl: organizationImage,
-      ownerId: '',
     },
   })
 
   async function submitOrganizationCreation(data: OrganizationFormValues) {
-    try {
-      const response = await api.post<SubmitOrganizationCreationResponse>(
-        '/organizations',
-        {
-          name: data.name,
-          domain: data.domain,
-          description: data.description,
-          imageUrl: data.imageUrl,
-          shouldAttachUsersByDomain: data.shouldAttachUsersByDomain,
-          ownerId: userId,
-        },
-      )
+    startTransition(async () => {
+      const state = await createOrganizationAction(data)
 
-      toast({
-        title: 'Sucesso!',
-        description: `Organização ${data.name} com sucesso.`,
-        variant: 'success',
-      })
+      if (state.success === true) {
+        toast({
+          title: 'Organização criada com sucesso',
+          description: 'Você será redirecionado para a página da organização',
+          variant: 'success',
+        })
 
-      form.reset()
-      router.push(`/organizations/${response.data.organizationId}`)
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 400) {
-          return toast({
-            title: 'Erro!',
-            description: 'Já existe uma organização com essas credenciais!',
-            variant: 'destructive',
-          })
-        } else {
-          toast({
-            title: 'Erro!',
-            description: 'Ocorreu um erro ao criar a organização.',
-            variant: 'destructive',
-          })
-        }
+        const slug = generateSlug(data.name)
+
+        router.push(`/organizations/${slug}`)
+      } else {
+        toast({
+          title: 'Erro ao criar organização',
+          description: state.message,
+          variant: 'destructive',
+        })
       }
-    }
+    })
   }
 
   return (
@@ -121,7 +96,9 @@ export const NewOrganizationForm = ({ userId }: NewOrganizationFormProps) => {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome</FormLabel>
+                <FormLabel>
+                  Nome<strong className="text-destructive">*</strong>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Insira o nome da sua organização"
@@ -225,10 +202,14 @@ export const NewOrganizationForm = ({ userId }: NewOrganizationFormProps) => {
 
         <Button
           type="submit"
-          disabled={form.formState.isSubmitting || !form.formState.isValid}
+          disabled={isPending || !form.formState.isValid}
           className="mt-4 self-end"
         >
-          Criar organização
+          {isPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <span>Criar organização</span>
+          )}
         </Button>
       </form>
     </Form>

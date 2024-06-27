@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-import { getUserInfo } from '@/http/get-user-info'
+import { auth } from '@/auth/auth'
 import { Container } from '@/components/container'
 import { Separator } from '@/components/ui/separator'
 
 import { NewOrganizationForm } from './_components/new-organization-form'
 
 const NewOrganizationPage = async () => {
-  const user = await getUserInfo()
+  const { user } = await auth()
 
   if (!user) redirect('/auth/sign-in')
 
@@ -21,7 +21,7 @@ const NewOrganizationPage = async () => {
 
       <Separator className="my-4" />
 
-      <NewOrganizationForm userId={user.id} />
+      <NewOrganizationForm />
     </Container>
   )
 }

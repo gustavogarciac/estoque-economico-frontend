@@ -20,3 +20,10 @@ export const debounce = <T extends (...args: any[]) => void>(
     timeout = setTimeout(() => func(...args), wait)
   }
 }
+
+export function generateSlug(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^a-zA-Z0-9-]/g, '')
+}
