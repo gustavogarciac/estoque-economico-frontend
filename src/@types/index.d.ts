@@ -36,7 +36,13 @@ interface User {
   id: string
   name: string
   email: string
-  createdAt: string
-  updatedAt: string
-  member_on: string[]
+  avatarUrl: string | null
+  createdAt: Date
+  updatedAt: Date
+  member_on: {
+    id: string
+    role: 'ADMIN' | 'MEMBER' | 'BILLING'
+    userId: string
+    organizationId: string
+  }
 }

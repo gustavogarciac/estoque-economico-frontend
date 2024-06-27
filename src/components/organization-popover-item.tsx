@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-import { GetUserOrganizationResponse } from '@/actions/get-user-organizations'
+import { GetUserOrganizationResponse } from '@/http/get-user-organizations'
 import { cn } from '@/lib/utils'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'

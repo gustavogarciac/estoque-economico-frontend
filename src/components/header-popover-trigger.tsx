@@ -4,7 +4,7 @@ import { ChevronsUpDownIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-import { GetUserOrganizationResponse } from '@/actions/get-user-organizations'
+import { GetUserOrganizationResponse } from '@/http/get-user-organizations'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { PopoverTrigger } from './ui/popover'

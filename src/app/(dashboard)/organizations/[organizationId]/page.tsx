@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-import { getUserInfo } from '@/actions/get-user-info'
+import { getUserInfo } from '@/http/get-user-info'
 import { Container } from '@/components/container'
 import { SearchInput } from '@/components/search-input'
 import {

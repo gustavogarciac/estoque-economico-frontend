@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-import { signOut } from '@/actions/sign-out'
+import { signOut } from '@/http/sign-out'
 
 import { Button } from './ui/button'
 import { toast } from './ui/use-toast'

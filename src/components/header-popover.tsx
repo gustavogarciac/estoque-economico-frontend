@@ -2,7 +2,7 @@ import { PlusCircleIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-import { GetUserOrganizationResponse } from '@/actions/get-user-organizations'
+import { GetUserOrganizationResponse } from '@/http/get-user-organizations'
 
 import { HeaderPopoverTrigger } from './header-popover-trigger'
 import { OrganizationPopoverItem } from './organization-popover-item'
