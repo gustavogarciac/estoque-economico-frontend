@@ -1,9 +1,14 @@
+import { PlusCircleIcon } from 'lucide-react'
+import Link from 'next/link'
+
 import { Container } from '@/components/container'
+import { OrganizationCard } from '@/components/organization-card'
+import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-// import { getUserOrganizations } from '@/http/get-user-organizations'
+import { getUserOrganizations } from '@/http/get-user-organizations'
 
 const Home = async () => {
-  // const organizations = await getUserOrganizations()
+  const organizations = await getUserOrganizations()
 
   return (
     <Container otherClasses="mt-4">
@@ -15,8 +20,7 @@ const Home = async () => {
       <Separator className="my-4" />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-        <span>Testing</span>
-        {/* {organizations?.map((organization) => (
+        {organizations?.map((organization) => (
           <OrganizationCard key={organization.id} organization={organization} />
         ))}
 
@@ -28,7 +32,7 @@ const Home = async () => {
             <span className="text-primary">Criar nova organização</span>
             <PlusCircleIcon className="ml-2 size-6 text-primary" />
           </Link>
-        </Card> */}
+        </Card>
       </div>
     </Container>
   )
