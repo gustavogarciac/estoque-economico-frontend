@@ -1,10 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
 import { LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -19,7 +19,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { api } from '@/lib/axios'
+
+import { signUpAction } from '../../actions'
 
 const signUpFormSchema = z
   .object({
@@ -45,9 +46,10 @@ const signUpFormSchema = z
     }
   })
 
-type SignUpFormSchemaType = z.infer<typeof signUpFormSchema>
+export type SignUpFormSchemaType = z.infer<typeof signUpFormSchema>
 
 export const SignUpForm = () => {
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const form = useForm<SignUpFormSchemaType>({
     resolver: zodResolver(signUpFormSchema),
@@ -58,38 +60,25 @@ export const SignUpForm = () => {
   })
 
   async function handleSignUp(data: SignUpFormSchemaType) {
-    try {
-      await api.post('/users', {
-        email: data.email,
-        name: data.name,
-        password: data.password,
-      })
+    startTransition(async () => {
+      const { success, message } = await signUpAction(data)
 
-      toast({
-        title: 'Sucesso!',
-        description: 'Você realizou o seu cadastro com sucesso!',
-        variant: 'success',
-      })
-
-      await new Promise((resolve) => setTimeout(resolve, 5000))
-      router.push('/auth/sign-in')
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 400) {
-          return toast({
-            title: 'Erro!',
-            description: 'O e-mail informado já está em uso.',
-            variant: 'destructive',
-          })
-        }
+      if (success === true) {
+        toast({
+          title: 'Sucesso!',
+          description: 'Você realizou o seu cadastro com sucesso!',
+          variant: 'success',
+        })
+        await new Promise((resolve) => setTimeout(resolve, 5000))
+        router.push('/auth/sign-in')
       } else {
         toast({
-          title: 'Erro!',
-          description: 'Ocorreu um erro ao realizar o cadastro.',
+          title: 'Erro ao realizar cadastro!',
+          description: message,
           variant: 'destructive',
         })
       }
-    }
+    })
   }
 
   return (
@@ -174,12 +163,8 @@ export const SignUpForm = () => {
           </Link>
         </span>
 
-        <Button
-          type="submit"
-          className="mt-4 self-end"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? (
+        <Button type="submit" className="mt-4 self-end" disabled={isPending}>
+          {isPending ? (
             <>
               <LoaderCircle className="mr-1 inline-block size-4 animate-spin" />
               <span>Cadastrando...</span>

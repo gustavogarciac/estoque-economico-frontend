@@ -1,11 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
-import { setCookie } from 'cookies-next'
 import { LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -20,7 +19,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { api } from '@/lib/axios'
+
+import { signInAction } from '../../actions'
 
 const signInFormSchema = z.object({
   email: z.string().email({ message: 'Insira um e-mail válido' }),
@@ -29,13 +29,10 @@ const signInFormSchema = z.object({
     .min(6, { message: 'A senha deve ter no mínimo 6 caracteres' }),
 })
 
-type SignInFormSchemaType = z.infer<typeof signInFormSchema>
-
-type HandleSignInResponse = {
-  token: string
-}
+export type SignInFormSchemaType = z.infer<typeof signInFormSchema>
 
 export const SignInForm = () => {
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const form = useForm<SignInFormSchemaType>({
     resolver: zodResolver(signInFormSchema),
@@ -46,52 +43,26 @@ export const SignInForm = () => {
   })
 
   async function handleSignIn(data: SignInFormSchemaType) {
-    try {
-      const response = await api.post<HandleSignInResponse>(
-        '/sessions/password',
-        {
-          email: data.email,
-          password: data.password,
-        },
-      )
+    startTransition(async () => {
+      const state = await signInAction(data)
 
-      toast({
-        title: 'Sucesso!',
-        description: 'Você foi autenticado com sucesso.',
-        variant: 'success',
-      })
+      if (state.success === true) {
+        toast({
+          title: 'Autenticação realizada com sucesso!',
+          description: 'Você será redirecionado para a página inicial.',
+          variant: 'success',
+        })
 
-      setCookie('token', response.data.token, {
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-      })
-
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      router.push('/')
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 404) {
-          return toast({
-            title: 'Erro!',
-            description: 'Usuário não encontrado.',
-            variant: 'destructive',
-          })
-        }
-
-        if (error.response?.status === 400) {
-          return toast({
-            title: 'Erro!',
-            description: 'E-mail ou senha incorretos.',
-            variant: 'destructive',
-          })
-        }
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        router.push('/')
       } else {
-        return toast({
-          title: 'Erro!',
-          description: 'Ocorreu um erro inesperado.',
+        toast({
+          title: 'Ocorreu um erro!',
+          description: state.message,
           variant: 'destructive',
         })
       }
-    }
+    })
   }
 
   return (
@@ -144,16 +115,15 @@ export const SignInForm = () => {
 
         <Button
           type="submit"
-          className="mt-4 self-end"
-          disabled={form.formState.isSubmitting}
+          className="mt-4 w-1/3 self-end"
+          disabled={isPending}
         >
-          {form.formState.isSubmitting ? (
+          {isPending ? (
             <>
               <LoaderCircle className="mr-1 inline-block size-4 animate-spin" />
-              <span>Acessando...</span>
             </>
           ) : (
-            'Acessar a plataforma'
+            'Acessar'
           )}
         </Button>
       </form>

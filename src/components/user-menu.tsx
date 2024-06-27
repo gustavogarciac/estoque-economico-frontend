@@ -68,7 +68,7 @@ export const UserMenu = ({ user }: UserMenuProps) => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <SignOutButton />
           </DropdownMenuItem>
         </DropdownMenuGroup>
