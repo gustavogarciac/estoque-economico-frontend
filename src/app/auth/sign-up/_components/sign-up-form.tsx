@@ -69,7 +69,6 @@ export const SignUpForm = () => {
           description: 'Você realizou o seu cadastro com sucesso!',
           variant: 'success',
         })
-        await new Promise((resolve) => setTimeout(resolve, 5000))
         router.push('/auth/sign-in')
       } else {
         toast({

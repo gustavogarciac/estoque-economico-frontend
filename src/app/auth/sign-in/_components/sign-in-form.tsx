@@ -52,8 +52,6 @@ export const SignInForm = () => {
           description: 'Você será redirecionado para a página inicial.',
           variant: 'success',
         })
-
-        await new Promise((resolve) => setTimeout(resolve, 1000))
         router.push('/')
       } else {
         toast({
