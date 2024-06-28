@@ -23,7 +23,7 @@ export const OrganizationPopoverItem = ({
 
   return (
     <Link
-      href={`/organizations/${organization.id}`}
+      href={`/organizations/${organization.slug}`}
       key={organization.id}
       className={cn(
         'flex flex-row items-center gap-2 border border-border p-3 hover:bg-muted/40',

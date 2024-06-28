@@ -1,52 +1,39 @@
 'use client'
-import { faker } from '@faker-js/faker'
-import { ChevronsUpDownIcon } from 'lucide-react'
+import { ChevronsUpDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import React from 'react'
 
 import { GetUserOrganizationResponse } from '@/http/get-user-organizations'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { PopoverTrigger } from './ui/popover'
 
-interface HeaderPopoverTriggerProps {
-  organizations: GetUserOrganizationResponse[]
-}
-
 export const HeaderPopoverTrigger = ({
   organizations,
-}: HeaderPopoverTriggerProps) => {
+}: {
+  organizations: GetUserOrganizationResponse[]
+}) => {
   const pathname = usePathname()
-  const currentOrganization = organizations.find(
-    (org) => org.id === pathname.split('/')[2],
-  )
+  const slug = pathname.split('/')[2]
+
+  const currentOrganization = organizations.find((org) => org.slug === slug)
 
   return (
-    <PopoverTrigger className="flex flex-row items-center gap-2 rounded-sm p-2 transition-colors duration-300 ease-in-out hover:bg-zinc-50/10">
+    <PopoverTrigger className="flex w-[168px] items-center gap-2 rounded p-1 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary">
       {currentOrganization ? (
-        <div className="flex flex-row items-center gap-2">
-          <Avatar className="max-h-[20px] max-w-[20px]">
-            <AvatarImage
-              src={currentOrganization.imageUrl ?? faker.image.avatarGitHub()}
-            />
-            <AvatarFallback>GG</AvatarFallback>
+        <>
+          <Avatar className="mr-2 size-4">
+            {currentOrganization.imageUrl && (
+              <AvatarImage src={currentOrganization.imageUrl} />
+            )}
+            <AvatarFallback />
           </Avatar>
 
-          <span className="text-sm font-semibold">
-            {currentOrganization.name}
-          </span>
-
-          <ChevronsUpDownIcon className="size-4" />
-        </div>
+          <span className="truncate text-left">{currentOrganization.name}</span>
+        </>
       ) : (
-        <div className="flex flex-row items-center gap-2">
-          <span className="text-sm font-semibold">
-            Selecione uma organização
-          </span>
-
-          <ChevronsUpDownIcon className="size-4" />
-        </div>
+        <span className="text-muted-foreground">Selecionar organização</span>
       )}
+      <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
     </PopoverTrigger>
   )
 }

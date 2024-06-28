@@ -2,7 +2,6 @@ import { BellIcon, Container } from 'lucide-react'
 import { redirect } from 'next/navigation'
 
 import { auth } from '@/auth/auth'
-import { getUserOrganizations } from '@/http/get-user-organizations'
 
 import { HeaderPopover } from './header-popover'
 import { Button } from './ui/button'
@@ -10,7 +9,6 @@ import { UserMenu } from './user-menu'
 
 export const Header = async () => {
   const { user } = await auth()
-  const userOrganizations = await getUserOrganizations()
 
   if (!user) {
     redirect('/auth/sign-in')
@@ -24,9 +22,7 @@ export const Header = async () => {
 
           <span className="font-extrabold text-muted">/</span>
 
-          {userOrganizations && (
-            <HeaderPopover organizations={userOrganizations} />
-          )}
+          <HeaderPopover />
         </div>
 
         <span className="hidden text-xs text-muted md:block">

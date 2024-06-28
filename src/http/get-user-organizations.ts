@@ -5,6 +5,7 @@ import { api } from '@/lib/axios'
 export interface GetUserOrganizationResponse {
   id: string
   name: string
+  slug: string
   domain: string | null
   imageUrl: string | null
   role: 'ADMIN' | 'BILLING' | 'MEMBER'
