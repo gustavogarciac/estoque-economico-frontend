@@ -5,6 +5,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { LoaderIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -27,27 +28,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
-import { api } from '@/lib/axios'
+
+import { updateProductAction } from '../actions'
 
 const detailsFormSchema = z.object({
   code: z.string(),
   stock: z.string(),
   categoryId: z.string(),
   author: z.string(),
+  name: z.string().optional(),
+  description: z.string().optional(),
 })
 
-type DetailsFormSchemaType = z.infer<typeof detailsFormSchema>
+export type DetailsFormSchemaType = z.infer<typeof detailsFormSchema>
 
 interface ProductDetailsFormProps {
   product: Product
   organizationCategories: Category[]
+  orgSlug: string
 }
 
 export const ProductDetailsForm = ({
   product,
   organizationCategories,
+  orgSlug,
 }: ProductDetailsFormProps) => {
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const form = useForm<DetailsFormSchemaType>({
     resolver: zodResolver(detailsFormSchema),
@@ -56,36 +64,35 @@ export const ProductDetailsForm = ({
       stock: String(product.stock),
       categoryId: product.category.id,
       author: product.author.name,
+      name: product.name,
+      description: product.description,
     },
   })
 
   async function handleUpdateProduct(data: DetailsFormSchemaType) {
-    try {
-      const { categoryId, code, stock } = data
-
-      await api.put(
-        `/organizations/${product.organizationId}/products/${product.id}`,
-        {
-          code,
-          stock: Number(stock),
-          categoryId,
-        },
-      )
-
-      router.refresh()
-
-      toast({
-        title: 'Produto atualizado com sucesso!',
-        variant: 'success',
+    startTransition(async () => {
+      const state = await updateProductAction(orgSlug, {
+        ...data,
+        id: product.id,
       })
-    } catch (error) {
-      toast({
-        title: 'Erro ao atualizar produto',
-        description:
-          'Ocorreu um erro ao tentar atualizar o produto. Tente novamente mais tarde.',
-        variant: 'destructive',
-      })
-    }
+
+      if (state.success === true) {
+        toast({
+          title: 'Produto atualizado com sucesso!',
+          description:
+            'O registro deste produto foi salvo com sucesso, você pode acessá-lo na página principal.',
+          variant: 'success',
+        })
+
+        router.refresh()
+      } else {
+        toast({
+          title: 'Ocorreu um erro!',
+          description: state.message,
+          variant: 'destructive',
+        })
+      }
+    })
   }
 
   return (
@@ -160,6 +167,38 @@ export const ProductDetailsForm = ({
 
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="col-span-1">
+              <FormLabel>Nome</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Nome do produto" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="col-span-1">
+              <FormLabel>Descrição</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="Uma breve descrição a respeito do produto."
+                  className="resize-none"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="author"
           render={({ field }) => (
             <FormItem className="col-span-1">
@@ -195,11 +234,10 @@ export const ProductDetailsForm = ({
             variant={'secondary'}
             size="sm"
             type="submit"
-            disabled={form.formState.isSubmitting}
+            disabled={isPending}
           >
-            {form.formState.isSubmitting ? (
+            {isPending ? (
               <span>
-                Atualizando...{' '}
                 <LoaderIcon className="ml-2 size-4 animate-spin" />
               </span>
             ) : (

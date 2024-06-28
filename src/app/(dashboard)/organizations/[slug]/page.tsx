@@ -15,7 +15,11 @@ import { getOrganizationProducts } from '@/http/get-organization-products'
 import { NewProductDialog } from './_components/new-product-dialog'
 import { ProductsTableRow } from './_components/products-table-row'
 
-const OrganizationIdPage = async ({ params }: { params: { slug: string } }) => {
+const OrganizationSlugPage = async ({
+  params,
+}: {
+  params: { slug: string }
+}) => {
   const { slug } = params
   const { products } = await getOrganizationProducts(slug)
 
@@ -53,4 +57,4 @@ const OrganizationIdPage = async ({ params }: { params: { slug: string } }) => {
   )
 }
 
-export default OrganizationIdPage
+export default OrganizationSlugPage

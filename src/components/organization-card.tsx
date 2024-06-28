@@ -6,6 +6,7 @@ import React from 'react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RoleBadge } from '@/components/ui/role-badge'
+import { generateSlug } from '@/lib/utils'
 
 interface OrganizationCardProps {
   organization: {
@@ -18,10 +19,11 @@ interface OrganizationCardProps {
 }
 
 export const OrganizationCard = ({ organization }: OrganizationCardProps) => {
+  const slug = generateSlug(organization.name)
   return (
     <Card key={organization.id} className="bg-secondary/40">
       <Link
-        href={`/organizations/${organization.id}`}
+        href={`/organizations/${slug}`}
         className="group flex flex-row items-center justify-between pr-2"
       >
         <div className="flex flex-col">

@@ -46,6 +46,7 @@ export const ProductDetailsDialog = async ({
           <ProductDetailsForm
             product={product}
             organizationCategories={organizationCategories}
+            orgSlug={orgSlug}
           />
         </div>
       </DialogContent>

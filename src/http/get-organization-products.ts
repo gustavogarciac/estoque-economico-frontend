@@ -7,9 +7,13 @@ export interface GetOrganizationProductsResponse {
 }
 
 export async function getOrganizationProducts(slug: string) {
-  const response = await api.get<GetOrganizationProductsResponse>(
-    `/organizations/${slug}/products`,
-  )
+  try {
+    const response = await api.get<GetOrganizationProductsResponse>(
+      `/organizations/${slug}/products`,
+    )
 
-  return response.data
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
 }

@@ -1,6 +1,6 @@
 import { api } from '@/lib/axios'
 
-interface CreateProductRequest {
+interface UpdateProductRequest {
   orgSlug: string
   data: {
     stock: number
@@ -8,16 +8,13 @@ interface CreateProductRequest {
     name: string | undefined
     description: string | undefined
     categoryId: string
+    id: string
   }
 }
 
-interface CreateProductResponse {
-  organizationId: string
-}
-
-export async function createProduct({ orgSlug, data }: CreateProductRequest) {
-  const result = await api.post<CreateProductResponse>(
-    `/organizations/${orgSlug}/products`,
+export async function updateProduct({ orgSlug, data }: UpdateProductRequest) {
+  const result = await api.put(
+    `/organizations/${orgSlug}/products/${data.id}`,
     {
       stock: data.stock,
       name: data.name,
