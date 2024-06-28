@@ -17,16 +17,16 @@ interface Organization {
 
 interface Product {
   id: string
-  name: string | null
+  name: string
   code: string
   stock: number
-  description: string | null
-  category: {
+  organizationId: string
+  description: string
+  author: {
     id: string
     name: string
   }
-  organizationId: string
-  author: {
+  category: {
     id: string
     name: string
   }

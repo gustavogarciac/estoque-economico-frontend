@@ -9,26 +9,20 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { api } from '@/lib/axios'
+import { getOrganizationCategories } from '@/http/get-categories'
 
 import { ProductDetailsForm } from './product-details-form'
 
 interface ProductDetailsDialogProps {
   product: Product
-}
-
-async function fetchCategories(organizationId: string) {
-  const { data } = await api.get<Category[]>(
-    `/organizations/${organizationId}/categories`,
-  )
-
-  return data
+  orgSlug: string
 }
 
 export const ProductDetailsDialog = async ({
   product,
+  orgSlug,
 }: ProductDetailsDialogProps) => {
-  const organizationCategories = await fetchCategories(product.organizationId)
+  const organizationCategories = await getOrganizationCategories(orgSlug)
   return (
     <Dialog>
       <DialogTrigger asChild>

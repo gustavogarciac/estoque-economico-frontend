@@ -7,9 +7,13 @@ import { ProductDetailsDialog } from './product-details-dialog'
 
 interface ProductsTableRowProps {
   product: Product
+  orgSlug: string
 }
 
-export const ProductsTableRow = ({ product }: ProductsTableRowProps) => {
+export const ProductsTableRow = ({
+  product,
+  orgSlug,
+}: ProductsTableRowProps) => {
   return (
     <TableRow>
       <TableCell className="text-muted-foreground">{product.code}</TableCell>
@@ -31,7 +35,7 @@ export const ProductsTableRow = ({ product }: ProductsTableRowProps) => {
         <span className="text-muted-foreground">{product.author.name}</span>
       </TableCell>
       <TableCell>
-        <ProductDetailsDialog product={product} />
+        <ProductDetailsDialog product={product} orgSlug={orgSlug} />
       </TableCell>
     </TableRow>
   )

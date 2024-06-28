@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-import { getUserInfo } from '@/http/get-user-info'
 import { Container } from '@/components/container'
 import { SearchInput } from '@/components/search-input'
 import {
@@ -11,41 +10,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { api } from '@/lib/axios'
+import { getOrganizationProducts } from '@/http/get-organization-products'
 
 import { NewProductDialog } from './_components/new-product-dialog'
 import { ProductsTableRow } from './_components/products-table-row'
 
-interface FetchProductResponse {
-  products: Product[]
-}
+const OrganizationIdPage = async ({ params }: { params: { slug: string } }) => {
+  const { slug } = params
+  const { products } = await getOrganizationProducts(slug)
 
-async function fetchProducts(organizationId: string) {
-  const products = await api.get<FetchProductResponse>(
-    `/organizations/${organizationId}/products`,
-  )
-
-  return products.data
-}
-
-const OrganizationIdPage = async ({
-  params,
-}: {
-  params: { organizationId: string }
-}) => {
-  const { products } = await fetchProducts(params.organizationId)
-  const user = await getUserInfo()
-
-  if (!user) redirect('/auth/sign-in')
+  if (!slug) redirect('/')
 
   return (
     <Container otherClasses="mt-5">
       <div className="flex flex-row gap-2">
         <SearchInput />
-        <NewProductDialog
-          organizationId={params.organizationId}
-          userId={user.id}
-        />
+        <NewProductDialog orgSlug={slug} />
       </div>
 
       <Table className="mt-6">
@@ -61,7 +41,11 @@ const OrganizationIdPage = async ({
         </TableHeader>
         <TableBody>
           {products.map((product) => (
-            <ProductsTableRow key={product.id} product={product} />
+            <ProductsTableRow
+              key={product.id}
+              product={product}
+              orgSlug={slug}
+            />
           ))}
         </TableBody>
       </Table>

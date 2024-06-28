@@ -1,8 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2Icon } from 'lucide-react'
+import { Loader2Icon, PlusIcon } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -25,31 +27,31 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
-import { api } from '@/lib/axios'
 
-import { NewCategoryDialog } from '../categories/_components/new-category-dialog'
+import { createProductAction } from '../actions'
 
 interface NewProductFormProps {
-  userId: string
-  organizationId: string
+  orgSlug: string
   categories: Category[]
 }
 
 const newProductFormSchema = z.object({
-  code: z.string(),
-  stock: z.string(),
-  categoryId: z.string(),
+  code: z.string().min(1, { message: 'O código não pode ser vazio.' }),
+  stock: z
+    .string()
+    .min(1, { message: 'Por favor, informe corretamente o estoque.' }),
+  categoryId: z.string().min(1, { message: 'Selecione uma categoria.' }),
   description: z.string().optional(),
   name: z.string().optional(),
 })
 
-type ProductFormType = z.infer<typeof newProductFormSchema>
+export type ProductFormType = z.infer<typeof newProductFormSchema>
 
 export const NewProductForm = ({
-  userId,
-  organizationId,
+  orgSlug,
   categories,
 }: NewProductFormProps) => {
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const form = useForm<ProductFormType>({
     resolver: zodResolver(newProductFormSchema),
@@ -63,36 +65,30 @@ export const NewProductForm = ({
   })
 
   async function handleSubmitForm(data: ProductFormType) {
-    try {
-      const { categoryId, code, stock, description, name } = data
+    startTransition(async () => {
+      const state = await createProductAction(orgSlug, data)
 
-      await api.post(`/products/${organizationId}`, {
-        authorId: userId,
-        stock: Number(stock),
-        categoryId,
-        code,
-        description: description || '',
-        name: name || null,
-      })
+      if (state.success === true) {
+        toast({
+          title: 'Produto criado com sucesso!',
+          description:
+            'O registro deste produto foi salvo com sucesso, você pode acessá-lo na página principal.',
+          variant: 'success',
+        })
 
-      form.resetField('code')
-      form.resetField('stock')
-      form.resetField('name')
-      form.resetField('description')
-      router.refresh()
-
-      toast({
-        title: 'Registro criado!',
-        description: 'O registro foi criado com sucesso.',
-        variant: 'success',
-      })
-    } catch (error) {
-      toast({
-        title: 'Erro ao criar registro',
-        description: 'Por favor, preencha os campos obrigatórios corretamente.',
-        variant: 'destructive',
-      })
-    }
+        form.resetField('code')
+        form.resetField('stock')
+        form.resetField('name')
+        form.resetField('description')
+        router.refresh()
+      } else {
+        toast({
+          title: 'Ocorreu um erro!',
+          description: state.message,
+          variant: 'destructive',
+        })
+      }
+    })
   }
 
   return (
@@ -136,7 +132,6 @@ export const NewProductForm = ({
                 <FormControl>
                   <Input placeholder="Informe o estoque" {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -170,14 +165,19 @@ export const NewProductForm = ({
                         </SelectItem>
                       ))
                     ) : (
-                      <NewCategoryDialog
-                        organizationId={organizationId}
-                        triggerClasses="w-full"
-                      />
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="secondary"
+                        className="w-full"
+                      >
+                        <Link href={`/organizations/${orgSlug}/categories`}>
+                          <PlusIcon className="mr-2 size-4" /> Nova categoria
+                        </Link>
+                      </Button>
                     )}
                   </SelectContent>
                 </Select>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -214,12 +214,8 @@ export const NewProductForm = ({
           )}
         />
 
-        <Button
-          type="submit"
-          className="self-end"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? (
+        <Button type="submit" className="self-end" disabled={isPending}>
+          {isPending ? (
             <Loader2Icon className="size-4 animate-spin" />
           ) : (
             'Criar registro'
