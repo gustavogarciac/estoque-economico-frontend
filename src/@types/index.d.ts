@@ -36,6 +36,7 @@ interface User {
   id: string
   name: string
   email: string
+  onboarded: boolean
   avatarUrl: string | null
   createdAt: Date
   updatedAt: Date

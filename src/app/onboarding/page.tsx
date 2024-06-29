@@ -1,5 +1,6 @@
 import { ContainerIcon } from 'lucide-react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -11,8 +12,13 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { getProfile } from '@/http/get-user-info'
 
-const Onboarding = () => {
+const Onboarding = async () => {
+  const user = await getProfile()
+
+  if (user.onboarded) redirect('/')
+
   return (
     <Card className="w-full max-w-[450px]">
       <CardHeader>

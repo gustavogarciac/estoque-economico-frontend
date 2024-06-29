@@ -11,6 +11,12 @@ export function getCurrentOrg() {
   return cookies().get('org')?.value
 }
 
+export async function verifyOnboard() {
+  const user = await getProfile()
+
+  return user.onboarded
+}
+
 export async function auth() {
   const token = cookies().get('token')?.value
 

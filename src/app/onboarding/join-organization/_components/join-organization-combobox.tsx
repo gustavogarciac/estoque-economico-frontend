@@ -30,7 +30,6 @@ interface Organization {
 }
 
 export const JoinOrganizationComboBox = () => {
-  const [open, setOpen] = useState(false)
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [selectedOrganization, setSelectedOrganization] = useState('')
 
@@ -48,14 +47,9 @@ export const JoinOrganizationComboBox = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-full"
-          >
+          <Button variant="outline" role="combobox" className="w-full">
             {selectedOrganization ? (
               <div className="flex flex-row items-center gap-1">
                 <Image

@@ -1,12 +1,17 @@
 import { redirect } from 'next/navigation'
 import React, { PropsWithChildren } from 'react'
 
-import { isAuthenticated } from '@/auth/auth'
+import { isAuthenticated, verifyOnboard } from '@/auth/auth'
 import { Header } from '@/components/header'
 
-const DashboardLayout = (props: PropsWithChildren) => {
+const DashboardLayout = async (props: PropsWithChildren) => {
   if (!isAuthenticated()) {
     redirect('/auth/sign-in')
+  }
+
+  const userOnboarded = await verifyOnboard()
+  if (!userOnboarded) {
+    redirect('/onboarding')
   }
 
   return (
