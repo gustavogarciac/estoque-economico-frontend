@@ -1,13 +1,15 @@
 'use client'
 
 import { SearchIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 
-export const SearchInput = () => {
+export const SearchInput = ({ slug }: { slug: string }) => {
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState<'code' | 'name'>('code')
 
@@ -20,14 +22,13 @@ export const SearchInput = () => {
     if (event.key === 'Esc') {
       event.preventDefault()
       setSearch('')
+      handleSubmitSearch()
     }
   }
 
   function handleSubmitSearch() {
     event?.preventDefault()
-    if (!search) return
-    console.log('Search for:', search)
-    console.log('Filter type:', filterType)
+    router.push(`/organizations/${slug}?${filterType}=${search}`)
   }
 
   return (

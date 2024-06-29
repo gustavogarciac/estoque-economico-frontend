@@ -17,18 +17,21 @@ import { ProductsTableRow } from './_components/products-table-row'
 
 const OrganizationSlugPage = async ({
   params,
+  searchParams,
 }: {
   params: { slug: string }
+  searchParams: { code?: string; name?: string }
 }) => {
   const { slug } = params
-  const { products } = await getOrganizationProducts(slug)
+
+  const { products } = await getOrganizationProducts({ slug, searchParams })
 
   if (!slug) redirect('/')
 
   return (
     <Container otherClasses="mt-5">
       <div className="flex flex-row gap-2">
-        <SearchInput />
+        <SearchInput slug={slug} />
         <NewProductDialog orgSlug={slug} />
       </div>
 

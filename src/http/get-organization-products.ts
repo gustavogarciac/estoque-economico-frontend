@@ -2,18 +2,30 @@
 
 import { api } from '@/lib/axios'
 
-export interface GetOrganizationProductsResponse {
+interface GetOrganizationProductsRequest {
+  slug: string
+  searchParams: { code?: string; name?: string }
+}
+
+interface GetOrganizationProductsResponse {
   products: Product[]
 }
 
-export async function getOrganizationProducts(slug: string) {
-  try {
-    const response = await api.get<GetOrganizationProductsResponse>(
-      `/organizations/${slug}/products`,
-    )
-
-    return response.data
-  } catch (error) {
-    console.error(error)
+export async function getOrganizationProducts({
+  slug,
+  searchParams,
+}: GetOrganizationProductsRequest) {
+  let baseUrl = `/organizations/${slug}/products`
+  if (searchParams.code) {
+    baseUrl += `?code=${searchParams.code}`
+    console.log(baseUrl)
   }
+
+  if (searchParams.name) {
+    baseUrl += `?name=${searchParams.name}`
+  }
+
+  const response = await api.get<GetOrganizationProductsResponse>(baseUrl)
+
+  return response.data
 }
