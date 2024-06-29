@@ -2,7 +2,11 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import React, { PropsWithChildren } from 'react'
 
-import { isAuthenticated, verifyOnboard } from '@/auth/auth'
+import {
+  isAuthenticated,
+  verifyOnboard,
+  verifyUserBelongsToAnOrganization,
+} from '@/auth/auth'
 
 export const metadata: Metadata = {
   title: 'Onboarding',
@@ -16,6 +20,11 @@ const OnboardingLayout = async (props: PropsWithChildren) => {
 
   const isUserAlreadyOnboarded = await verifyOnboard()
   if (isUserAlreadyOnboarded) redirect('/')
+
+  const verifyIfUserBelongsToAnOrganization =
+    await verifyUserBelongsToAnOrganization()
+
+  if (verifyIfUserBelongsToAnOrganization) redirect('/onboarding/next')
 
   return (
     <div className="min-w-screen flex min-h-screen items-center justify-center">

@@ -45,5 +45,5 @@ interface User {
     role: 'ADMIN' | 'MEMBER' | 'BILLING'
     userId: string
     organizationId: string
-  }
+  }[]
 }

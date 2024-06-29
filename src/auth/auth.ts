@@ -17,6 +17,14 @@ export async function verifyOnboard() {
   return user.onboarded
 }
 
+export async function verifyUserBelongsToAnOrganization() {
+  const user = await getProfile()
+
+  if (user.member_on.length > 0) return true
+
+  return false
+}
+
 export async function auth() {
   const token = cookies().get('token')?.value
 
