@@ -18,7 +18,7 @@ interface NewProductDialogProps {
 }
 
 export const NewProductDialog = async ({ orgSlug }: NewProductDialogProps) => {
-  const categories = await getOrganizationCategories(orgSlug)
+  const categories = await getOrganizationCategories({ slug: orgSlug })
 
   return (
     <Dialog>

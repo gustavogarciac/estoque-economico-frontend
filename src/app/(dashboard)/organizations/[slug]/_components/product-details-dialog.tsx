@@ -22,7 +22,9 @@ export const ProductDetailsDialog = async ({
   product,
   orgSlug,
 }: ProductDetailsDialogProps) => {
-  const organizationCategories = await getOrganizationCategories(orgSlug)
+  const organizationCategories = await getOrganizationCategories({
+    slug: orgSlug,
+  })
   return (
     <Dialog>
       <DialogTrigger asChild>
