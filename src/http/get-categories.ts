@@ -2,10 +2,22 @@
 
 import { api } from '@/lib/axios'
 
-export async function getOrganizationCategories(slug: string) {
-  const response = await api.get<Category[]>(
-    `/organizations/${slug}/categories`,
-  )
+interface GetOrganizationCategoriesRequest {
+  slug: string
+  name?: string
+}
+
+export async function getOrganizationCategories({
+  slug,
+  name,
+}: GetOrganizationCategoriesRequest) {
+  let baseUrl = `/organizations/${slug}/categories`
+
+  if (name) {
+    baseUrl += `?name=${name}`
+  }
+
+  const response = await api.get<Category[]>(baseUrl)
 
   return response.data
 }

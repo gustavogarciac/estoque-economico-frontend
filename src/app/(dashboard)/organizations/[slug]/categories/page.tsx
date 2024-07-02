@@ -8,14 +8,21 @@ import { CategoryCard } from './_components/category-card'
 import { NewCategoryDialog } from './_components/new-category-dialog'
 import { SearchCategoryInput } from './_components/search-category-input'
 
-const CategoriesPage = async ({ params }: { params: { slug: string } }) => {
+const CategoriesPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { name?: string }
+}) => {
   const { slug } = params
-  const categories = await getOrganizationCategories(slug)
+  const { name } = searchParams
+  const categories = await getOrganizationCategories({ slug, name })
 
   return (
     <Container>
       <div className="mt-5 flex flex-row items-center justify-between gap-2">
-        <SearchCategoryInput />
+        <SearchCategoryInput slug={slug} />
         <NewCategoryDialog orgSlug={slug} />
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-3">

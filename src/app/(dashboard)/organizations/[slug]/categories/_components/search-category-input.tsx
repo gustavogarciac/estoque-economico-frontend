@@ -1,12 +1,14 @@
 'use client'
 
 import { SearchIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-export const SearchCategoryInput = () => {
+export const SearchCategoryInput = ({ slug }: { slug: string }) => {
+  const router = useRouter()
   const [search, setSearch] = useState('')
 
   function handleKeydown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -18,13 +20,13 @@ export const SearchCategoryInput = () => {
     if (event.key === 'Esc') {
       event.preventDefault()
       setSearch('')
+      router.push(`/organizations/${slug}/categories`)
     }
   }
 
   function handleSubmitSearch() {
     event?.preventDefault()
-    if (!search) return
-    console.log('Search for:', search)
+    router.push(`/organizations/${slug}/categories?name=${search}`)
   }
 
   return (
