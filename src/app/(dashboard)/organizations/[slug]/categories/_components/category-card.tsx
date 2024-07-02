@@ -7,9 +7,10 @@ import { CategoryDropdownMenu } from './category-dropdown-menu'
 
 interface CategoryCardProps {
   category: Category
+  orgSlug: string
 }
 
-export const CategoryCard = ({ category }: CategoryCardProps) => {
+export const CategoryCard = ({ category, orgSlug }: CategoryCardProps) => {
   return (
     <Card className="p-0">
       <CardHeader className="flex flex-row items-center justify-between p-4">
@@ -27,7 +28,7 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
           <span>{category.name}</span>
         </div>
 
-        <CategoryDropdownMenu category={category} />
+        <CategoryDropdownMenu category={category} orgSlug={orgSlug} />
       </CardHeader>
 
       <Separator />

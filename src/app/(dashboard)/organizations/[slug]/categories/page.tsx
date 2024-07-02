@@ -27,7 +27,7 @@ const CategoriesPage = async ({
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-3">
         {categories.map((category) => (
-          <CategoryCard key={category.id} category={category} />
+          <CategoryCard key={category.id} category={category} orgSlug={slug} />
         ))}
         <Card className="flex min-h-[200px] items-center justify-center border-dashed">
           <NewCategoryDialog

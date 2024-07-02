@@ -4,9 +4,11 @@ import {
   BarChartBigIcon,
   BarcodeIcon,
   CircleEllipsis,
+  EyeIcon,
   PencilIcon,
   TrashIcon,
 } from 'lucide-react'
+import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -21,10 +23,12 @@ import {
 
 interface CategoryDropdownMenuProps {
   category: Category
+  orgSlug: string
 }
 
 export const CategoryDropdownMenu = ({
   category,
+  orgSlug,
 }: CategoryDropdownMenuProps) => {
   return (
     <DropdownMenu>
@@ -38,7 +42,12 @@ export const CategoryDropdownMenu = ({
         <DropdownMenuLabel>Opções</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <span>Category details</span>
+          <DropdownMenuItem asChild>
+            <Link href={`/organizations/${orgSlug}/categories/${category.id}`}>
+              <EyeIcon className="mr-2 size-4" />
+              <span>Detalhes</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <PencilIcon className="mr-2 size-4" />
             <span>Editar</span>
