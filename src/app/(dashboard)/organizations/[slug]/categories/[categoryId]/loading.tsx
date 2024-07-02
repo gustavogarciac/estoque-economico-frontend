@@ -6,14 +6,16 @@ const CategoryDetailsLoadingPage = () => {
     <Container otherClasses="space-y-6">
       <div className="mt-6 grid grid-cols-1 items-center gap-6 md:grid-cols-2">
         <div className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <Skeleton className="h-5 w-1/3" />
-            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-10 w-full" />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <Skeleton className="h-5 w-1/3" />
             <Skeleton className="h-16 w-full" />
           </div>
+
+          <Skeleton className="mt-1 h-10 w-1/2" />
         </div>
 
         <div className="flex items-center gap-4">

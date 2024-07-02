@@ -18,7 +18,6 @@ export async function getOrganizationProducts({
   let baseUrl = `/organizations/${slug}/products`
   if (searchParams.code) {
     baseUrl += `?code=${searchParams.code}`
-    console.log(baseUrl)
   }
 
   if (searchParams.name) {

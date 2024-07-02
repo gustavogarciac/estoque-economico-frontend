@@ -24,8 +24,6 @@ const OrganizationSlugPage = async ({
 }) => {
   const { slug } = params
 
-  console.log(slug)
-
   const { products } = await getOrganizationProducts({ slug, searchParams })
 
   if (!slug) redirect('/')
