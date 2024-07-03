@@ -5,7 +5,6 @@ import {
   BarcodeIcon,
   CircleEllipsis,
   EyeIcon,
-  PencilIcon,
   TrashIcon,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -48,10 +47,6 @@ export const CategoryDropdownMenu = ({
               <span>Detalhes</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <PencilIcon className="mr-2 size-4" />
-            <span>Editar</span>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -59,9 +54,13 @@ export const CategoryDropdownMenu = ({
             <BarChartBigIcon className="mr-2 size-4" />
             <span>Métricas</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BarcodeIcon className="mr-2 size-4" />
-            <span>Registros</span>
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/organizations/${orgSlug}/categories/${category.id}/products`}
+            >
+              <BarcodeIcon className="mr-2 size-4" />
+              <span>Registros</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

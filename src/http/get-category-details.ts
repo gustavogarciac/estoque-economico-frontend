@@ -13,7 +13,7 @@ export async function getCategoryDetails({
 }: GetCategoryDetailsRequest) {
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
-  const response = await api.get<Category>(
+  const response = await api.get<CategoryWithProducts>(
     `/organizations/${slug}/categories/${categoryId}`,
   )
 

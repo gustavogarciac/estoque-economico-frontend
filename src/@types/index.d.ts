@@ -5,6 +5,21 @@ interface Category {
   imageUrl: string | null
 }
 
+interface CategoryWithProducts extends Category {
+  products: {
+    id: string
+    name: string
+    code: string
+    stock: number
+    description: string
+    userId: string
+    createdAt: Date
+    registered_by: {
+      name: string
+    }
+  }[]
+}
+
 interface Organization {
   id: string
   name: string
