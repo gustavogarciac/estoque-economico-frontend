@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/table'
 import { getOrganizationProducts } from '@/http/get-organization-products'
 
+import { EmptyRow } from './_components/empty-row'
 import { NewProductDialog } from './_components/new-product-dialog'
 import { ProductsTableRow } from './_components/products-table-row'
 
@@ -54,6 +55,8 @@ const OrganizationSlugPage = async ({
               orgSlug={slug}
             />
           ))}
+
+          {products.length < 1 && <EmptyRow />}
         </TableBody>
       </Table>
     </Container>
