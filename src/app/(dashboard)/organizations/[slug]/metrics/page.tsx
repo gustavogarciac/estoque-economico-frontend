@@ -6,16 +6,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 
-const MetricsPage = async ({
-  params,
-}: {
-  params: { organizationId: string }
-}) => {
+const MetricsPage = async ({ params }: { params: { slug: string } }) => {
   await new Promise((resolve) => setTimeout(resolve, 3000))
 
-  const { organizationId } = params
+  const { slug } = params
 
-  if (!organizationId) redirect('/')
+  if (!slug) redirect('/')
 
   return (
     <Container>
@@ -34,7 +30,7 @@ const MetricsPage = async ({
             </p>
 
             <Button asChild size="sm" variant="outline" className="self-end">
-              <Link href={`/organizations/${organizationId}/metrics/inventory`}>
+              <Link href={`/organizations/${slug}/metrics/inventory`}>
                 Ver inventário
               </Link>
             </Button>
@@ -55,7 +51,7 @@ const MetricsPage = async ({
             </p>
 
             <Button asChild size="sm" variant="outline" className="self-end">
-              <Link href={`/organizations/${organizationId}/metrics/featured`}>
+              <Link href={`/organizations/${slug}/metrics/featured`}>
                 Ver produtos
               </Link>
             </Button>
